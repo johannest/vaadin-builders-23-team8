@@ -55,7 +55,7 @@ public class TopicLayout extends VerticalLayout {
                     infoLayout.setSpacing(false);
                     infoLayout.setPadding(false);
                     infoLayout.add(new H4(topic.getTitle())); // TODO should be an anchor probably
-                    infoLayout.add(new Span(topic.getStatus().name()));
+                    infoLayout.add(createBadge(topic));
                     infoLayout.add(new Span(topic.getDescription()));
 
                     // TODO status
@@ -65,4 +65,16 @@ public class TopicLayout extends VerticalLayout {
                 });
     }
 
+    private static Span createBadge(TopicListItem topic) {
+        Span badge = new Span(topic.getStatus().name());
+        switch (topic.getStatus()) {
+            case NEW -> {
+                badge.getElement().getThemeList().add("badge");
+            }
+            case ANSWERED -> {
+                badge.getElement().getThemeList().add("badge success");
+            }
+        }
+        return badge;
+    }
 }
