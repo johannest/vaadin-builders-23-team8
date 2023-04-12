@@ -49,7 +49,7 @@ public class TopicView extends VerticalLayout implements HasUrlParameter<Long> {
             // TODO show error
             return;
         }
-        var upVote = new UpVote(topic.getId(), topic.getUpVotes().size());
+        var upVote = new UpVote(topic.getId(), topic.getUpVotes().size(), topicService);
         var infoLayout = new VerticalLayout();
         infoLayout.setSpacing(false);
         infoLayout.setPadding(false);

@@ -6,8 +6,6 @@ import com.example.application.views.main.TopicView;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.ComponentUtil;
 import com.vaadin.flow.component.UI;
-import com.vaadin.flow.component.html.H4;
-import com.vaadin.flow.component.html.H2;
 import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
@@ -18,9 +16,9 @@ import com.vaadin.flow.router.RouterLink;
 public class TopicLayout extends VerticalLayout {
 
     private final TopicFilterBar topicSearch;
-    private TopicService topicService;
+    private final TopicService topicService;
 
-    private VirtualList<TopicListItem> topicList;
+    private final VirtualList<TopicListItem> topicList;
 
     public TopicLayout(TopicService topicService) {
         this.topicService = topicService;
@@ -43,16 +41,18 @@ public class TopicLayout extends VerticalLayout {
         add(topicSearch);
         add(topicList);
 
-        ComponentUtil.addListener(UI.getCurrent(), CreateTopicEvent.class, event -> {
-            topicList.setItems(topicService.getAllTopicsSimplified());
-        });
+        UI ui = UI.getCurrent();
+        ComponentUtil.addListener(ui, CreateTopicEvent.class, event -> refresh());
+
+        ui.setPollInterval(5000);
+        ui.addPollListener(event -> refresh());
     }
 
     protected ComponentRenderer<Component, TopicListItem> createTopicItemRenderer() {
         return new ComponentRenderer<>(
                 topic -> {
                     var cardLayout = new HorizontalLayout();
-                    var upvoteCounter = new UpVote(topic.getId(), topic.getUpvoteCount());
+                    var upvoteCounter = new UpVote(topic.getId(), topic.getUpvoteCount(), topicService);
 
                     var infoLayout = new VerticalLayout();
                     infoLayout.setSpacing(false);

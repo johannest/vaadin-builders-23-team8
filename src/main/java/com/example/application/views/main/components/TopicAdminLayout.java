@@ -31,7 +31,7 @@ public class TopicAdminLayout extends TopicLayout {
         return new ComponentRenderer<>(
                 topic -> {
                     var cardLayout = new HorizontalLayout();
-                    var upvoteCounter = new UpVote(topic.getId(), topic.getUpvoteCount());
+                    var upvoteCounter = new UpVote(topic.getId(), topic.getUpvoteCount(), topicService);
 
                     var infoLayout = new VerticalLayout();
                     infoLayout.setSpacing(false);

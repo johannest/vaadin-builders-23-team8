@@ -10,6 +10,7 @@ import org.slf4j.LoggerFactory;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 public class DataLoader {
     private static final Logger LOG = LoggerFactory.getLogger(DataLoader.class);
@@ -34,10 +35,12 @@ public class DataLoader {
     }
 
     private void createTestUsers() {
-        createVaadiner(100, "Steven Grandchamp", "steven@vaadin.com", Role.HERD_LEADER);
-        createVaadiner(101, "Kimberly Weins", "kimw@vaadin.com", Role.HERD_LEADER);
-        createVaadiner(102, "Jurka Rahikkala", "jurka@vaadin.com", Role.HERD_LEADER);
-        createVaadiner(103, "Minna Hohti", "minna@vaadin.com", Role.HERD_LEADER);
+        createVaadiner("Steven Grandchamp", "steven@vaadin.com", Role.HERD_LEADER, null);
+        createVaadiner("Kimberly Weins", "kimw@vaadin.com", Role.HERD_LEADER, null);
+        createVaadiner("Jurka Rahikkala", "jurka@vaadin.com", Role.HERD_LEADER, null);
+        createVaadiner("Minna Hohti", "minna@vaadin.com", Role.HERD_LEADER, null);
+        createVaadiner("Mr User", "myuser@vaadin.com", Role.HERD_MEMBER, "cc208ae6-8688-4b67-8c46-2c0b42314e12");
+        createVaadiner("Mr Admin", "myadmin@vaadin.com", Role.HERD_LEADER, "5da74271-7f8e-4ce8-bdd1-f3339c98e656");
     }
 
     private List<Topic> createTestData() {
@@ -57,11 +60,19 @@ public class DataLoader {
         topic.setStatus(Status.NEW);
         topic.setDescription(description);
 
+        Optional<Vaadiner> vaadiner = vaadinerRepository.findById(1002L);
+        if (vaadiner.isEmpty()) {
+            LOG.error("User not created with id 1002!");
+            return null;
+        }
+        topic.setSubmitter(vaadiner.get());
+        topic.setAnswerer(vaadiner.get());
+
         List<UpVote> upVotes = new ArrayList<>();
         for (int i = 0; i < upVoteCount; i++) {
             UpVote upVote = new UpVote();
             upVote.setTimestamp(LocalDate.now());
-//            upVote.setVoter(); TODO
+            upVote.setVoter(vaadiner.get());
             upVotes.add(upVote);
         }
         upVoteRepository.saveAll(upVotes);
@@ -73,12 +84,12 @@ public class DataLoader {
         return topic;
     }
 
-    private Vaadiner createVaadiner(long id, String name, String email, Role role) {
+    private Vaadiner createVaadiner(String name, String email, Role role, String extRefId) {
         Vaadiner vaadiner = new Vaadiner();
-        vaadiner.setId(id);
         vaadiner.setName(name);
         vaadiner.setEmail(email);
         vaadiner.setRole(role);
+        vaadiner.setExtReferenceId(extRefId);
         return vaadinerRepository.save(vaadiner);
     }
 }

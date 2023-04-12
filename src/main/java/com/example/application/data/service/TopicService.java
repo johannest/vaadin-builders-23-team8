@@ -2,9 +2,10 @@ package com.example.application.data.service;
 
 import com.example.application.data.entity.*;
 import com.example.application.data.dto.TopicListItem;
+import com.vaadin.flow.server.VaadinRequest;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.jpa.domain.Specification;
+import org.springframework.data.domain.Example;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -20,10 +21,12 @@ public class TopicService {
     private final UpVoteRepository upVoteRepository;
     private final CommentRepository commentRepository;
 
-    public TopicService(@Autowired TopicRepository topicRepository,
-                        @Autowired VaadinerRepository vaadinerRepository,
-                        @Autowired UpVoteRepository upVoteRepository,
-                        @Autowired CommentRepository commentRepository) {
+
+    @Autowired
+    public TopicService(TopicRepository topicRepository,
+                        VaadinerRepository vaadinerRepository,
+                        UpVoteRepository upVoteRepository,
+                        CommentRepository commentRepository) {
         this.topicRepository = topicRepository;
         this.vaadinerRepository = vaadinerRepository;
         this.upVoteRepository = upVoteRepository;
@@ -116,7 +119,7 @@ public class TopicService {
             Optional<Vaadiner> optionalVaadiner = vaadinerRepository.findById(voter.getId());
             if (optionalVaadiner.isPresent()) {
                 refreshedVaadiner = optionalVaadiner.get();
-                if (refreshedVaadiner.getUpVotes().size()==MAX_VOTES) {
+                if (refreshedVaadiner.getUpVotes().size() == MAX_VOTES) {
                     throw new IllegalArgumentException("All votes already used");
                 }
 
@@ -175,6 +178,36 @@ public class TopicService {
     }
     public Topic getTopicById(Long id) {
         return topicRepository.findById(id).orElse(null);
+    }
+
+    public UpVote saveUpVote(Long topicId) {
+        Topic topic = getTopicById(topicId);
+        UpVote upVote = new UpVote();
+        upVote.setTopic(topic);
+        upVote.setVoter(getCurrentVaadiner());
+        return upVoteRepository.save(upVote);
+    }
+
+    public void removeUpVote(UpVote upVote) {
+        upVoteRepository.delete(upVote);
+    }
+
+    public UpVote getUpVote(Long topicId) {
+        Topic topic = getTopicById(topicId);
+
+        UpVote upVote = new UpVote();
+        upVote.setTopic(topic);
+        upVote.setVoter(getCurrentVaadiner());
+        return upVoteRepository.findOne(Example.of(upVote)).orElse(null);
+    }
+
+    //TODO move to correct Service
+    public Vaadiner getCurrentVaadiner() {
+        String extRefId = VaadinRequest.getCurrent().getUserPrincipal().getName();
+        Vaadiner vaadiner = new Vaadiner();
+        vaadiner.setExtReferenceId(extRefId);
+        return vaadinerRepository.findOne(Example.of(vaadiner)).orElseThrow(() ->
+                new IllegalStateException("No user found"));
     }
 
     public List<Comment> getCommentsForTopic(Long topicId) {

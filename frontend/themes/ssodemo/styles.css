@@ -57,3 +57,39 @@ body {
 .topic-item-description {
     padding-top: 10px;
 }
+
+.up-vote {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 55px;
+    height: 50px;
+    border: 1px solid var(--lumo-tertiary-text-color);
+    border-radius: 15px;
+    color: var(--lumo-tertiary-text-color);
+
+    font-weight: bold;
+}
+
+.up-vote:hover {
+    box-shadow: 0 0 10px 3px rgba(0, 0, 0, 0.07);
+}
+
+.up-vote.active {
+    border: 1px solid var(--lumo-primary-color);
+    color: var(--lumo-primary-color);
+}
+
+.up-vote > vaadin-icon {
+    width: 32px;
+    height: 32px;
+    margin-top: 10px;
+}
+
+.up-vote > span {
+    padding-bottom: 5px;
+    top: -10px;
+    position: relative;
+}
+

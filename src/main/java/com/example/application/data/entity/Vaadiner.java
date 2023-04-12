@@ -24,6 +24,8 @@ public class Vaadiner extends AbstractEntity {
     @OneToMany
     private List<UpVote> upVotes;
 
+    private String extReferenceId;
+
     public String getName() {
         return name;
     }
@@ -88,8 +90,16 @@ public class Vaadiner extends AbstractEntity {
         this.upVotes = upVotes;
     }
 
+    public String getExtReferenceId() {
+        return extReferenceId;
+    }
+
+    public void setExtReferenceId(String extReferenceId) {
+        this.extReferenceId = extReferenceId;
+    }
+
     @Override
     public String toString() {
-        return name+" ("+email+")";
+        return name + " (" + email + ")";
     }
 }
