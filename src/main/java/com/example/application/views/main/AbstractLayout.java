@@ -12,14 +12,18 @@ import com.vaadin.flow.spring.security.AuthenticationContext;
 import jakarta.annotation.security.PermitAll;
 import jakarta.annotation.security.RolesAllowed;
 import org.apache.commons.lang3.StringUtils;
+import org.ietf.jgss.Oid;
+import org.springframework.security.oauth2.core.oidc.user.DefaultOidcUser;
 import org.springframework.security.oauth2.core.oidc.user.OidcUser;
 
-import java.util.Arrays;
+import java.util.*;
 
 
 public class AbstractLayout extends Div implements RouterLayout {
 
-    public static final String AUTHORITY_PREFIX = "ROLE_";
+    private static final String REALM_ACCESS = "realm_access";
+    private static final String ROLES = "roles";
+
     private final HorizontalLayout menuLayout = new HorizontalLayout();
     private final AuthenticationContext authenticationContext;
 
@@ -53,10 +57,14 @@ public class AbstractLayout extends Div implements RouterLayout {
     }
 
     private boolean matchRole(String role) {
-        return authenticationContext.getAuthenticatedUser(OidcUser.class).isPresent() && authenticationContext.getAuthenticatedUser(OidcUser.class).get().getAuthorities()
-                .stream()
-                .filter(grantedAuthority -> StringUtils.startsWith(grantedAuthority.toString(), AUTHORITY_PREFIX))
-                .map(grantedAuthority -> StringUtils.replace(grantedAuthority.toString(), AUTHORITY_PREFIX, ""))
+        DefaultOidcUser defaultOidcUser =
+                authenticationContext.getAuthenticatedUser(DefaultOidcUser.class).get();
+
+        var grantedRoles = (ArrayList<String>) defaultOidcUser.getUserInfo()
+                .getClaimAsMap(REALM_ACCESS)
+                .get(ROLES);
+
+        return grantedRoles.stream()
                 .anyMatch(grantedRole -> StringUtils.equals(grantedRole, role));
     }
 }
