@@ -5,6 +5,7 @@ public class TopicListItem {
     private long id;
     private String title;
     private String description;
+    private int commentCount;
 
     public int getUpvoteCount() {
         return upvoteCount;
@@ -36,5 +37,13 @@ public class TopicListItem {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public int getCommentCount() {
+        return commentCount;
+    }
+
+    public void setCommentCount(int commentCount) {
+        this.commentCount = commentCount;
     }
 }

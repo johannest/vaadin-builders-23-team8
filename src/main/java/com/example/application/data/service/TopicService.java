@@ -47,6 +47,7 @@ public class TopicService {
         topicListItem.setUpvoteCount(topic.getUpVotes().size());
         topicListItem.setTitle(topic.getTitle());
         topicListItem.setDescription(topic.getDescription());
+        topicListItem.setCommentCount(topic.getComments().size());
         return topicListItem;
     }
 

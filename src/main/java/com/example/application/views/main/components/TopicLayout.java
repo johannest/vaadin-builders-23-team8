@@ -62,8 +62,8 @@ public class TopicLayout extends VerticalLayout {
                     infoLayout.add(new Span(topic.getDescription()));
 
                     // TODO status
-                    // TODO comment count
-                    cardLayout.add(upvoteCounter, infoLayout);
+                    var commentIndicator = new CommentIndicator(topic.getId(), topic.getCommentCount());
+                    cardLayout.add(upvoteCounter, infoLayout, commentIndicator);
                     return cardLayout;
                 });
     }
