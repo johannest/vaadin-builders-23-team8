@@ -6,6 +6,7 @@ import com.example.application.views.main.TopicView;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.ComponentUtil;
 import com.vaadin.flow.component.UI;
+import com.vaadin.flow.component.html.H4;
 import com.vaadin.flow.component.html.H2;
 import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
@@ -24,7 +25,10 @@ public class TopicLayout extends VerticalLayout {
     public TopicLayout(TopicService topicService) {
         this.topicService = topicService;
         setHeightFull();
+        setClassName("topic-layout");
+
         topicList = new VirtualList<>();
+        topicList.setClassName("topic-item-list");
         topicList.setRenderer(createTopicItemRenderer());
 
         topicList.setHeightFull();
@@ -33,11 +37,10 @@ public class TopicLayout extends VerticalLayout {
         topicSearch = new TopicFilterBar();
         topicSearch.setWidth("100%");
         topicSearch.setSearchListener(((searchTerm, category) -> {
-            System.out.println(searchTerm + " " + category);
+            topicList.setItems(topicService.searchTopics(searchTerm, category));
         }));
 
-        add(new H2("This is the Topic Layout"));
-
+        add(topicSearch);
         add(topicList);
 
         ComponentUtil.addListener(UI.getCurrent(), CreateTopicEvent.class, event -> {
@@ -45,25 +48,45 @@ public class TopicLayout extends VerticalLayout {
         });
     }
 
-    private ComponentRenderer<Component, TopicListItem> createTopicItemRenderer() {
+    protected ComponentRenderer<Component, TopicListItem> createTopicItemRenderer() {
         return new ComponentRenderer<>(
                 topic -> {
                     var cardLayout = new HorizontalLayout();
                     var upvoteCounter = new UpVote(topic.getId(), topic.getUpvoteCount());
-                    cardLayout.setMargin(true);
 
-                    VerticalLayout infoLayout = new VerticalLayout();
+                    var infoLayout = new VerticalLayout();
                     infoLayout.setSpacing(false);
                     infoLayout.setPadding(false);
                     var titleLink = new RouterLink(topic.getTitle(), TopicView.class, topic.getId());
-                    infoLayout.add(titleLink);
-                    infoLayout.add(new Span(topic.getStatus().name()));
-                    infoLayout.add(new Span(topic.getDescription()));
+
+                    infoLayout.add(new HorizontalLayout(createBadge(topic), titleLink));
+
+                    var description = new Span(topic.getDescription());
+                    description.setClassName("topic-item-description");
+                    infoLayout.add(description);
 
                     var commentIndicator = new CommentIndicator(topic.getId(), topic.getCommentCount());
                     cardLayout.add(upvoteCounter, infoLayout, commentIndicator);
+                    cardLayout.setClassName("topic-item");
+                    cardLayout.setAlignItems(Alignment.CENTER);
                     return cardLayout;
                 });
     }
 
+    protected static Span createBadge(TopicListItem topic) {
+        Span badge = new Span(topic.getStatus().name());
+        switch (topic.getStatus()) {
+            case NEW -> {
+                badge.getElement().getThemeList().add("badge");
+            }
+            case ANSWERED -> {
+                badge.getElement().getThemeList().add("badge success");
+            }
+        }
+        return badge;
+    }
+
+    protected void refresh() {
+        topicList.setItems(topicService.searchTopics(topicSearch.getSearchTerm(), topicSearch.getCategory()));
+    }
 }

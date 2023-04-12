@@ -87,4 +87,9 @@ public class Vaadiner extends AbstractEntity {
     public void setUpVotes(List<UpVote> upVotes) {
         this.upVotes = upVotes;
     }
+
+    @Override
+    public String toString() {
+        return name+" ("+email+")";
+    }
 }

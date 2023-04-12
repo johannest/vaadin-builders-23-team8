@@ -1,10 +1,10 @@
 body {
-    background-color: var(--lumo-contrast-10pct);
+    background-color: var(--lumo-contrast-5pct);
 }
 
 .main {
     background-color: white;
-    border: 1px solid var(--lumo-contrast-10pct);
+
     border-radius: 10px;
     max-width: 1150px;
     align-self: center;
@@ -12,8 +12,48 @@ body {
     margin-right: auto;
 }
 
-.topic-form {
+.admin {
+    background-color: white;
+    border: 2px solid var(--lumo-error-color-50pct);
+    border-radius: 10px;
+    max-width: 1150px;
+    align-self: center;
+    margin-left: auto;
+    margin-right: auto;
     padding: 20px;
+}
+
+.topic-content {
+    border-top: 1px solid var(--lumo-contrast-10pct);
+}
+
+.topic-layout, .topic-form {
+    padding: 20px 40px 20px 40px;
+}
+
+.topic-form {
     border-left: 1px solid var(--lumo-contrast-10pct);
     max-width: 400px;
+}
+
+.topic-item {
+    background-color: var(--lumo-contrast-5pct);
+    border-radius: 5px;
+    padding: 15px;
+}
+
+.topic-item-list > div .topic-item {
+    margin-bottom: 10px;
+}
+
+.topic-item-list > div:last-child .topic-item {
+    margin-bottom: 0;
+}
+
+.event-header > h1 {
+    margin: auto;
+}
+
+.topic-item-description {
+    padding-top: 10px;
 }

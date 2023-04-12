@@ -37,15 +37,15 @@ public class TopicService {
         return listAll().stream().filter(topic -> {
             if (searchTerm.isPresent()) {
                 if (category.isPresent()) {
-                    return (topic.getTitle().contains(searchTerm.get())
-                            || topic.getDescription().contains(searchTerm.get()))
+                    return (topic.getTitle().toLowerCase().contains(searchTerm.get().toLowerCase())
+                            || topic.getDescription().toLowerCase().contains(searchTerm.get()))
                             && topic.getCategory().equals(category.get());
                 } else {
-                    return topic.getTitle().contains(searchTerm.get())
-                            || topic.getDescription().contains(searchTerm.get());
+                    return topic.getTitle().toLowerCase().contains(searchTerm.get().toLowerCase())
+                            || topic.getDescription().toLowerCase().contains(searchTerm.get().toLowerCase());
                 }
             } else if (category.isPresent()) {
-                return topic.getCategory().equals(category.get());
+                return category.get().equals(topic.getCategory());
             }
             return true;
         }).map(this::topicEntityToListItem).collect(Collectors.toList());
@@ -65,6 +65,7 @@ public class TopicService {
         topicListItem.setCommentCount(topic.getComments().size());
         topicListItem.setStatus(topic.getStatus());
         topicListItem.setCategory(topic.getCategory());
+        topicListItem.setAnswerer(topic.getAnswerer());
         return topicListItem;
     }
 
@@ -137,6 +138,25 @@ public class TopicService {
         }
     }
 
+    public Topic assign(TopicListItem topic, Vaadiner vaadiner) {
+        // refresh the Vaadiner from the DB
+        Optional<Vaadiner> optionalVaadiner = vaadinerRepository.findById(vaadiner.getId());
+        if (optionalVaadiner.isEmpty()) {
+            throw new EntityNotFoundException("Vaadiner not found");
+        }
+
+        // refresh the topic from the DB
+        Optional<Topic> byId = topicRepository.findById(topic.getId());
+        if (byId.isPresent()) {
+            Topic topicToBeSaved = byId.get();
+            topicToBeSaved.setAnswerer(optionalVaadiner.get());
+
+            // update the topic
+            return save(topicToBeSaved);
+        } else {
+            throw new EntityNotFoundException("Topic not found");
+        }
+    }
     public Topic getTopicById(Long id) {
         return topicRepository.findById(id).orElse(null);
     }

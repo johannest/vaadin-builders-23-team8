@@ -49,7 +49,7 @@ public class TopicFilterBar extends HorizontalLayout {
         this.searchListener = searchListener;
     }
 
-    private Optional<String> getSearchTerm() {
+    protected Optional<String> getSearchTerm() {
         String searchTerm = searchField.getValue();
         if (searchTerm != null && !searchTerm.trim().isEmpty()) {
             return Optional.of(searchTerm.trim());
@@ -58,7 +58,7 @@ public class TopicFilterBar extends HorizontalLayout {
         }
     }
 
-    private Optional<Category> getCategory() {
+    protected Optional<Category> getCategory() {
         Category category = categorySelect.getValue();
         if (category != null) {
             return Optional.of(category);
