@@ -1,5 +1,6 @@
 package com.example.application.data.entity;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.ManyToOne;
 
@@ -8,7 +9,7 @@ import java.time.LocalDateTime;
 @Entity
 public class Comment extends AbstractEntity {
 
-    @ManyToOne
+    @ManyToOne(cascade = {CascadeType.PERSIST})
     private Topic topic;
     private String content;
     private LocalDateTime timestamp;

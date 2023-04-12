@@ -7,6 +7,7 @@ import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Example;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -14,6 +15,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
+@Transactional
 public class TopicService {
     private static final int MAX_VOTES = 5;
     private final TopicRepository topicRepository;
@@ -176,6 +178,7 @@ public class TopicService {
             throw new EntityNotFoundException("Topic not found");
         }
     }
+
     public Topic getTopicById(Long id) {
         return topicRepository.findById(id).orElse(null);
     }
@@ -185,7 +188,11 @@ public class TopicService {
         UpVote upVote = new UpVote();
         upVote.setTopic(topic);
         upVote.setVoter(getCurrentVaadiner());
-        return upVoteRepository.save(upVote);
+
+        UpVote saved = upVoteRepository.save(upVote);
+        topic.getUpVotes().add(saved);
+        topicRepository.save(topic);
+        return saved;
     }
 
     public void removeUpVote(UpVote upVote) {
