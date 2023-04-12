@@ -1,6 +1,7 @@
 package com.example.application.views.main.components;
 
 import com.example.application.data.dto.TopicListItem;
+import com.example.application.data.entity.Status;
 import com.example.application.data.entity.Vaadiner;
 import com.example.application.data.service.TopicService;
 import com.example.application.data.service.VaadinerService;
@@ -55,6 +56,7 @@ public class TopicAdminLayout extends TopicLayout {
 
     private Component createAssigneeSelect(TopicListItem topic) {
         ComboBox<Vaadiner> assigneeSelect = new ComboBox<>();
+        assigneeSelect.setEnabled(!topic.getStatus().equals(Status.ANSWERED));
         assigneeSelect.setPlaceholder("Assign topic to: ");
         assigneeSelect.setItems(vaadinerService.listAllLeaders());
         assigneeSelect.setValue(topic.getAnswerer());
@@ -68,6 +70,7 @@ public class TopicAdminLayout extends TopicLayout {
 
     private Component createAnsweredButton(TopicListItem topic) {
         Button answeredButton = new Button("Mark as answered");
+        answeredButton.setEnabled(!topic.getStatus().equals(Status.ANSWERED));
         answeredButton.setIcon(VaadinIcon.CHECK_SQUARE_O.create());
         answeredButton.addClickListener(e -> {
             topicService.answered(topic);

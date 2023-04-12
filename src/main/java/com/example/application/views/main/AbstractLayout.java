@@ -4,6 +4,7 @@ import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
+import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.RouteConfiguration;
 import com.vaadin.flow.router.RouteData;
 import com.vaadin.flow.router.RouterLayout;
@@ -19,7 +20,7 @@ import org.springframework.security.oauth2.core.oidc.user.OidcUser;
 import java.util.*;
 
 
-public class AbstractLayout extends Div implements RouterLayout {
+public class AbstractLayout extends VerticalLayout implements RouterLayout {
 
     private static final String REALM_ACCESS = "realm_access";
     private static final String ROLES = "roles";
@@ -45,7 +46,7 @@ public class AbstractLayout extends Div implements RouterLayout {
                     menuLayout.add(routerLink);
                 });
 
-        menuLayout.setPadding(true);
+        menuLayout.setPadding(false);
 
         Button logout = new Button("Logout", event -> this.authenticationContext.logout());
         logout.addThemeVariants(ButtonVariant.LUMO_TERTIARY_INLINE);

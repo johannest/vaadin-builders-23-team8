@@ -1,5 +1,6 @@
 body {
     background-color: var(--lumo-contrast-5pct);
+    overflow: hidden; /* Hide scrollbars */
 }
 
 .main {
@@ -21,6 +22,7 @@ body {
     margin-left: auto;
     margin-right: auto;
     padding: 20px;
+    overflow: hidden;
 }
 
 .topic-content {

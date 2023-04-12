@@ -29,7 +29,7 @@ public class TopicLayout extends VerticalLayout {
         topicList.setClassName("topic-item-list");
         topicList.setRenderer(createTopicItemRenderer());
 
-        topicList.setHeightFull();
+        //topicList.setHeightFull();
         topicList.setItems(topicService.getAllTopicsSimplified());
 
         topicSearch = new TopicFilterBar();

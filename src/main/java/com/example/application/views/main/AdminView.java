@@ -24,11 +24,13 @@ public class AdminView extends Div {
     public AdminView(TopicService topicService, VaadinerService vaadinerService) {
         this.topicService = topicService;
         setClassName("admin");
-        topicLayout = new TopicAdminLayout(topicService, vaadinerService);
+
         H1 topicAdministration = new H1("Topic administration");
         topicAdministration.getStyle().set("text-align", "center");
         add(topicAdministration);
         addClassName("event-header");
+
+        topicLayout = new TopicAdminLayout(topicService, vaadinerService);
         add(topicLayout);
         setSizeFull();
     }
