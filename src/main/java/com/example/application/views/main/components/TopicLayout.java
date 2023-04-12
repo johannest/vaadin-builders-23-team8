@@ -3,6 +3,8 @@ package com.example.application.views.main.components;
 import com.example.application.data.dto.TopicListItem;
 import com.example.application.data.service.TopicService;
 import com.vaadin.flow.component.Component;
+import com.vaadin.flow.component.ComponentUtil;
+import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.html.H2;
 import com.vaadin.flow.component.html.H4;
 import com.vaadin.flow.component.html.Span;
@@ -23,7 +25,7 @@ public class TopicLayout extends VerticalLayout {
         setHeightFull();
         topicList = new VirtualList<>();
         topicList.setRenderer(createTopicItemRenderer());
-        ;
+
         topicList.setHeight("80vh");
         topicList.setItems(topicService.getAllTopicsSimplified());
 
@@ -36,6 +38,10 @@ public class TopicLayout extends VerticalLayout {
         add(new H2("This is the Topic Layout"));
 
         add(topicList);
+
+        ComponentUtil.addListener(UI.getCurrent(), CreateTopicEvent.class, event -> {
+            topicList.setItems(topicService.getAllTopicsSimplified());
+        });
     }
 
     private ComponentRenderer<Component, TopicListItem> createTopicItemRenderer() {

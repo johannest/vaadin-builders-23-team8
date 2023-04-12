@@ -4,7 +4,9 @@ import com.example.application.data.entity.Category;
 import com.example.application.data.entity.Status;
 import com.example.application.data.entity.Topic;
 import com.example.application.data.service.TopicService;
+import com.vaadin.flow.component.ComponentUtil;
 import com.vaadin.flow.component.Text;
+import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.Unit;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.combobox.ComboBox;
@@ -75,6 +77,7 @@ public class TopicForm extends VerticalLayout {
 
             topicService.save(topic);
             topicBinder.setBean(new Topic());
+            ComponentUtil.fireEvent(UI.getCurrent(), new CreateTopicEvent(this));
         }
 
     }
