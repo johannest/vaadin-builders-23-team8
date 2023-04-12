@@ -1,6 +1,7 @@
 package com.example.application.views.main.components;
 
 import com.example.application.data.dto.TopicListItem;
+import com.example.application.data.entity.Status;
 import com.example.application.data.service.TopicService;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.html.H2;
@@ -13,15 +14,25 @@ import com.vaadin.flow.data.renderer.ComponentRenderer;
 
 public class TopicLayout extends VerticalLayout {
 
+    private final TopicFilterBar topicSearch;
     private TopicService topicService;
 
     private VirtualList<TopicListItem> topicList;
 
     public TopicLayout(TopicService topicService) {
         this.topicService = topicService;
+        setHeightFull();
         topicList = new VirtualList<>();
-        topicList.setRenderer(createTopicItemRenderer());
+        topicList.setRenderer(createTopicItemRenderer());;
+        topicList.setHeight("80vh");
         topicList.setItems(topicService.getAllTopicsSimplified());
+
+        topicSearch = new TopicFilterBar();
+        topicSearch.setWidth("100%");
+        topicSearch.setSearchListener(((searchTerm, category) -> {
+            System.out.println(searchTerm+" "+category);
+        }));
+
         add(new H2("This is the Topic Layout"));
 
         add(topicList);
@@ -38,11 +49,12 @@ public class TopicLayout extends VerticalLayout {
                     infoLayout.setSpacing(false);
                     infoLayout.setPadding(false);
                     infoLayout.add(new H4(topic.getTitle())); // TODO should be an anchor probably
+                    infoLayout.add(new Span(topic.getStatus().name()));
                     infoLayout.add(new Span(topic.getDescription()));
 
                     // TODO status
-                    // TODO comment count
-                    cardLayout.add(upvoteCounter, infoLayout);
+                    var commentIndicator = new CommentIndicator(topic.getId(), topic.getCommentCount());
+                    cardLayout.add(upvoteCounter, infoLayout, commentIndicator);
                     return cardLayout;
                 });
     }

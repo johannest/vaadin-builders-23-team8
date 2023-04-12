@@ -1,10 +1,16 @@
 package com.example.application.data.dto;
 
+import com.example.application.data.entity.Category;
+import com.example.application.data.entity.Status;
+
 public class TopicListItem {
     private int upvoteCount;
     private long id;
     private String title;
     private String description;
+    private int commentCount;
+    private Category category;
+    private Status status;
 
     public int getUpvoteCount() {
         return upvoteCount;
@@ -36,5 +42,29 @@ public class TopicListItem {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public int getCommentCount() {
+        return commentCount;
+    }
+
+    public void setCommentCount(int commentCount) {
+        this.commentCount = commentCount;
+    }
+
+    public Category getCategory() {
+        return category;
+    }
+
+    public void setCategory(Category category) {
+        this.category = category;
+    }
+
+    public Status getStatus() {
+        return status;
+    }
+
+    public void setStatus(Status status) {
+        this.status = status;
     }
 }
