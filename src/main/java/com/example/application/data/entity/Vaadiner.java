@@ -15,7 +15,6 @@ public class Vaadiner extends AbstractEntity {
     @Enumerated(EnumType.STRING)
     private Role role;
     private String avatarBase64;
-
     @OneToMany
     private List<Topic> submittedTopics;
     @OneToMany
