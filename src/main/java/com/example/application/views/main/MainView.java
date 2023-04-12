@@ -17,12 +17,12 @@ public class MainView extends HorizontalLayout {
 
     @Autowired
     private TopicService topicService;
-    private TopicForm topicForm;
-    private TopicLayout topicLayout;
+    private final TopicForm topicForm;
+    private final TopicLayout topicLayout;
 
     public MainView() {
         setClassName("main");
-        topicForm = new TopicForm();
+        topicForm = new TopicForm(topicService);
         topicLayout = new TopicLayout(topicService);
         add(topicLayout, topicForm);
 

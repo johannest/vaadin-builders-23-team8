@@ -16,6 +16,7 @@ import java.util.List;
 
 public class TopicLayout extends VerticalLayout {
 
+    private final TopicFilterBar topicSearch;
     private TopicService topicService;
 
     private VirtualList<TopicListItem> topicList;
@@ -24,8 +25,15 @@ public class TopicLayout extends VerticalLayout {
         topicList = new VirtualList<>();
         topicList.setRenderer(createTopicItemRenderer());
         topicList.setItems(createTestData());
-        add(new H2("This is the Topic Layout"));
 
+        topicSearch = new TopicFilterBar();
+        topicSearch.setWidth("100%");
+        topicSearch.setSearchListener(((searchTerm, category) -> {
+            System.out.println(searchTerm+" "+category);
+        }));
+
+        add(new H2("This is the Topic Layout"));
+        add(topicSearch);
         add(topicList);
     }
 
