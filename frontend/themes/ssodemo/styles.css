@@ -15,4 +15,5 @@ body {
 .topic-form {
     padding: 20px;
     border-left: 1px solid var(--lumo-contrast-10pct);
+    max-width: 400px;
 }
