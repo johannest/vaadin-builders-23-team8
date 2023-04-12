@@ -5,6 +5,7 @@ import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.textfield.TextField;
+import com.vaadin.flow.data.value.ValueChangeMode;
 
 import java.util.Optional;
 
@@ -23,6 +24,7 @@ public class TopicFilterBar extends HorizontalLayout {
         searchField.setPlaceholder("Search topics...");
         searchField.setPrefixComponent(VaadinIcon.SEARCH.create());
         searchField.setClearButtonVisible(true);
+        searchField.setValueChangeMode(ValueChangeMode.TIMEOUT);
         searchField.addValueChangeListener(e -> {
             if (searchListener != null) {
                 searchListener.searchValueChanged(getSearchTerm(), getCategory());
@@ -31,6 +33,8 @@ public class TopicFilterBar extends HorizontalLayout {
 
         categorySelect = new ComboBox<>();
         categorySelect.setPlaceholder("Category");
+        categorySelect.setItems(Category.values());
+        categorySelect.setClearButtonVisible(true);
         categorySelect.addValueChangeListener(e -> {
             if (searchListener != null) {
                 searchListener.searchValueChanged(getSearchTerm(), getCategory());

@@ -28,6 +28,9 @@ public class TopicLayout extends VerticalLayout {
 
         topicSearch = new TopicFilterBar();
         topicSearch.setWidth("100%");
+        topicSearch.setSearchListener(((searchTerm, category) -> {
+            System.out.println(searchTerm+" "+category);
+        }));
 
         add(new H2("This is the Topic Layout"));
         add(topicSearch);
