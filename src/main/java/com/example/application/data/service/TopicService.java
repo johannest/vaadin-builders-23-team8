@@ -1,7 +1,7 @@
 package com.example.application.data.service;
 
-import com.example.application.data.entity.*;
 import com.example.application.data.dto.TopicListItem;
+import com.example.application.data.entity.*;
 import com.vaadin.flow.server.VaadinRequest;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -196,7 +196,10 @@ public class TopicService {
     }
 
     public void removeUpVote(UpVote upVote) {
+        Topic topic = upVote.getTopic();
         upVoteRepository.delete(upVote);
+        topic.getUpVotes().remove(upVote);
+        topicRepository.save(topic);
     }
 
     public UpVote getUpVote(Long topicId) {
