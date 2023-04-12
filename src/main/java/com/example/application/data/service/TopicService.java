@@ -45,7 +45,7 @@ public class TopicService {
                             || topic.getDescription().contains(searchTerm.get());
                 }
             } else if (category.isPresent()) {
-                return topic.getCategory().equals(category.get());
+                return category.get().equals(topic.getCategory());
             }
             return true;
         }).map(this::topicEntityToListItem).collect(Collectors.toList());
