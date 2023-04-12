@@ -41,7 +41,7 @@ public class CommentLayout extends VerticalLayout {
         commentInput.setI18n(messageInputTexts);
         commentInput.addSubmitListener(submitEvent -> {
             var comment = new Comment();
-            comment.setCommenter(vaadinerService.listAll().get(0)); // TODO
+            comment.setCommenter(topicService.getCurrentVaadiner());
             comment.setTimestamp(LocalDateTime.now());
             comment.setTopic(topic);
             comment.setContent(submitEvent.getValue());
