@@ -2,7 +2,7 @@ package com.example.application.views.main;
 
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
-import com.vaadin.flow.component.html.Div;
+import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.RouteConfiguration;
@@ -13,9 +13,7 @@ import com.vaadin.flow.spring.security.AuthenticationContext;
 import jakarta.annotation.security.PermitAll;
 import jakarta.annotation.security.RolesAllowed;
 import org.apache.commons.lang3.StringUtils;
-import org.ietf.jgss.Oid;
 import org.springframework.security.oauth2.core.oidc.user.DefaultOidcUser;
-import org.springframework.security.oauth2.core.oidc.user.OidcUser;
 
 import java.util.*;
 
@@ -25,14 +23,15 @@ public class AbstractLayout extends VerticalLayout implements RouterLayout {
     private static final String REALM_ACCESS = "realm_access";
     private static final String ROLES = "roles";
 
-    private final HorizontalLayout menuLayout = new HorizontalLayout();
+    private final HorizontalLayout headerLayout = new HorizontalLayout();
     private final AuthenticationContext authenticationContext;
 
     public AbstractLayout(AuthenticationContext authenticationContext) {
         this.authenticationContext = authenticationContext;
-        add(menuLayout);
+        add(headerLayout);
         setHeightFull();
 
+        HorizontalLayout menuLayout = new HorizontalLayout();
         RouteConfiguration.forApplicationScope()
                 .getAvailableRoutes()
                 .forEach(routeData -> {
@@ -46,11 +45,21 @@ public class AbstractLayout extends VerticalLayout implements RouterLayout {
                     menuLayout.add(routerLink);
                 });
 
-        menuLayout.setPadding(false);
 
+        menuLayout.setPadding(false);
+        headerLayout.add(menuLayout);
         Button logout = new Button("Logout", event -> this.authenticationContext.logout());
         logout.addThemeVariants(ButtonVariant.LUMO_TERTIARY_INLINE);
         menuLayout.add(logout);
+
+        headerLayout.setWidthFull();
+        headerLayout.setJustifyContentMode(JustifyContentMode.BETWEEN);
+
+        Optional<DefaultOidcUser> authenticatedUser = authenticationContext.getAuthenticatedUser(DefaultOidcUser.class);
+        authenticatedUser.ifPresent(defaultOidcUser -> {
+            if (defaultOidcUser.getUserInfo().getFullName() != null)
+                headerLayout.add(new Span("Welcome, " + defaultOidcUser.getUserInfo().getFullName()));
+        });
 
         setSizeFull();
     }
