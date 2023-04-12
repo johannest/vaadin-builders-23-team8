@@ -45,12 +45,13 @@ public class AbstractLayout extends Div implements RouterLayout {
                     menuLayout.add(routerLink);
                 });
 
-        //menuLayout.setMargin(true);
+        menuLayout.setPadding(true);
 
         Button logout = new Button("Logout", event -> this.authenticationContext.logout());
         logout.addThemeVariants(ButtonVariant.LUMO_TERTIARY_INLINE);
         menuLayout.add(logout);
 
+        setSizeFull();
     }
 
     private boolean hasPermission(RouteData routeData) {
