@@ -15,15 +15,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 @PermitAll
 public class MainView extends HorizontalLayout {
 
-    @Autowired
-    private TopicService topicService;
+    private final TopicService topicService;
     private final TopicForm topicForm;
     private final TopicLayout topicLayout;
 
-    public MainView() {
+    public MainView(@Autowired TopicService topicService) {
         setClassName("main");
         topicForm = new TopicForm(topicService);
         topicLayout = new TopicLayout(topicService);
         add(topicLayout, topicForm);
+        this.topicService = topicService;
     }
 }
