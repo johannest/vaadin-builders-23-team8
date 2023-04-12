@@ -37,12 +37,12 @@ public class TopicService {
         return listAll().stream().filter(topic -> {
             if (searchTerm.isPresent()) {
                 if (category.isPresent()) {
-                    return (topic.getTitle().contains(searchTerm.get())
-                            || topic.getDescription().contains(searchTerm.get()))
+                    return (topic.getTitle().toLowerCase().contains(searchTerm.get().toLowerCase())
+                            || topic.getDescription().toLowerCase().contains(searchTerm.get()))
                             && topic.getCategory().equals(category.get());
                 } else {
-                    return topic.getTitle().contains(searchTerm.get())
-                            || topic.getDescription().contains(searchTerm.get());
+                    return topic.getTitle().toLowerCase().contains(searchTerm.get().toLowerCase())
+                            || topic.getDescription().toLowerCase().contains(searchTerm.get().toLowerCase());
                 }
             } else if (category.isPresent()) {
                 return category.get().equals(topic.getCategory());
