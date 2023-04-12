@@ -1,5 +1,6 @@
 package com.example.application.data.generator;
 
+import com.example.application.data.entity.Status;
 import com.example.application.data.entity.Topic;
 import com.example.application.data.entity.UpVote;
 import com.example.application.data.service.TopicRepository;
@@ -41,6 +42,7 @@ public class DataLoader {
         var topic = new Topic();
         topic.setId(id);
         topic.setTitle(title);
+        topic.setStatus(Status.NEW);
         topic.setDescription(description);
 
         List<UpVote> upVotes = new ArrayList<>();

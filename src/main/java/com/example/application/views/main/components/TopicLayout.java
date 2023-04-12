@@ -1,7 +1,6 @@
 package com.example.application.views.main.components;
 
 import com.example.application.data.dto.TopicListItem;
-import com.example.application.data.entity.Status;
 import com.example.application.data.service.TopicService;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.html.H2;
@@ -23,14 +22,15 @@ public class TopicLayout extends VerticalLayout {
         this.topicService = topicService;
         setHeightFull();
         topicList = new VirtualList<>();
-        topicList.setRenderer(createTopicItemRenderer());;
+        topicList.setRenderer(createTopicItemRenderer());
+        ;
         topicList.setHeight("80vh");
         topicList.setItems(topicService.getAllTopicsSimplified());
 
         topicSearch = new TopicFilterBar();
         topicSearch.setWidth("100%");
         topicSearch.setSearchListener(((searchTerm, category) -> {
-            System.out.println(searchTerm+" "+category);
+            System.out.println(searchTerm + " " + category);
         }));
 
         add(new H2("This is the Topic Layout"));
