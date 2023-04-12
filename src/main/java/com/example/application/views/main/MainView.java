@@ -25,8 +25,5 @@ public class MainView extends HorizontalLayout {
         topicForm = new TopicForm(topicService);
         topicLayout = new TopicLayout(topicService);
         add(topicLayout, topicForm);
-
-        setMaxHeight(1150, Unit.PIXELS);
-        getStyle().set("border", "");
     }
 }

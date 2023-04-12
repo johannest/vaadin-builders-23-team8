@@ -1,6 +1,7 @@
 package com.example.application.views.main.components;
 
 import com.example.application.data.dto.TopicListItem;
+import com.example.application.data.entity.Status;
 import com.example.application.data.service.TopicService;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.html.H2;
@@ -22,9 +23,11 @@ public class TopicLayout extends VerticalLayout {
     private VirtualList<TopicListItem> topicList;
     public TopicLayout(TopicService topicService) {
         this.topicService = topicService;
+        setHeightFull();
         topicList = new VirtualList<>();
         topicList.setRenderer(createTopicItemRenderer());
         topicList.setItems(createTestData());
+        topicList.setHeight("80vh");
 
         topicSearch = new TopicFilterBar();
         topicSearch.setWidth("100%");
@@ -39,19 +42,20 @@ public class TopicLayout extends VerticalLayout {
 
     private List<TopicListItem> createTestData() {
         var topicList = new ArrayList<TopicListItem>();
-        topicList.add(createListItem(1, "What happened?", "Everything was according to plan, but now it isn't. What happened?", 25));
-        topicList.add(createListItem(2, "Why would you do such a thing?", "Everyone told you not to, but you did. Why?", 1));
-        topicList.add(createListItem(3, "Where is this going?", "I feel lost, I'm not sure where I am and where this ship is headed to. Can you help me understand?", 10));
-        topicList.add(createListItem(4, "What now?", "What is the plan to resolve the problem of there existing problems?", 8));
+        topicList.add(createListItem(1, "What happened?", "Everything was according to plan, but now it isn't. What happened?", 25, Status.NEW));
+        topicList.add(createListItem(2, "Why would you do such a thing?", "Everyone told you not to, but you did. Why?", 1, Status.NEW));
+        topicList.add(createListItem(3, "Where is this going?", "I feel lost, I'm not sure where I am and where this ship is headed to. Can you help me understand?", 10, Status.ANSWERED));
+        topicList.add(createListItem(4, "What now?", "What is the plan to resolve the problem of there existing problems?", 8, Status.NEW));
         return topicList;
     }
 
-    private TopicListItem createListItem(long id, String title, String description, int upVoteCount) {
+    private TopicListItem createListItem(long id, String title, String description, int upVoteCount, Status status) {
         var item = new TopicListItem();
         item.setId(id);
         item.setTitle(title);
         item.setDescription(description);
         item.setUpvoteCount(upVoteCount);
+        item.setStatus(status);
 
         return item;
     }
@@ -67,6 +71,7 @@ public class TopicLayout extends VerticalLayout {
                     infoLayout.setSpacing(false);
                     infoLayout.setPadding(false);
                     infoLayout.add(new H4(topic.getTitle())); // TODO should be an anchor probably
+                    infoLayout.add(new Span(topic.getStatus().name()));
                     infoLayout.add(new Span(topic.getDescription()));
 
                     // TODO status
