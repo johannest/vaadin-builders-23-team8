@@ -1,18 +1,33 @@
 package com.example.application.data.service;
 
+import com.example.application.data.entity.Status;
 import com.example.application.data.entity.Topic;
+import com.example.application.data.entity.UpVote;
+import com.example.application.data.entity.Vaadiner;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class TopicService {
+    private static final int MAX_VOTES = 5;
+    private final TopicRepository topicRepository;
+    private final VaadinerRepository vaadinerRepository;
+    private final UpVoteRepository upVoteRepository;
+    private final CommentRepository commentRepository;
 
-    private TopicRepository topicRepository;
-
-    public TopicService(@Autowired TopicRepository topicRepository) {
+    public TopicService(@Autowired TopicRepository topicRepository,
+                        @Autowired VaadinerRepository vaadinerRepository,
+                        @Autowired UpVoteRepository upVoteRepository,
+                        @Autowired CommentRepository commentRepository) {
         this.topicRepository = topicRepository;
+        this.vaadinerRepository = vaadinerRepository;
+        this.upVoteRepository = upVoteRepository;
+        this.commentRepository = commentRepository;
     }
 
     public List<Topic> listAll() {
@@ -25,6 +40,67 @@ public class TopicService {
 
     public void delete(Topic topic) {
         topicRepository.delete(topic);
+    }
+
+    public Topic submitNew(Topic topic, Vaadiner submitter) {
+        // refresh the Vaadiner from the DB
+        Vaadiner refreshedVaadiner = null;
+        Optional<Vaadiner> optionalVaadiner = vaadinerRepository.findById(submitter.getId());
+        if (optionalVaadiner.isEmpty()) {
+            throw new EntityNotFoundException("Vaadiner not found");
+        }
+
+        topic.setStatus(Status.NEW);
+        topic.setSubmitter(refreshedVaadiner);
+
+        // save the topic
+        Topic savedTopic = save(topic);
+
+        // update Vaadiner
+        refreshedVaadiner.getSubmittedTopics().add(savedTopic);
+        vaadinerRepository.save(refreshedVaadiner);
+
+        return savedTopic;
+    }
+
+    public Topic upvote(Topic topic, Vaadiner voter) {
+        // create a new vote
+        UpVote upVote = new UpVote();
+        upVote.setTimestamp(LocalDate.now());
+        upVote.setVoter(voter);
+
+        // refresh the topic from the DB
+        Optional<Topic> byId = topicRepository.findById(topic.getId());
+        if (byId.isPresent()) {
+            Topic topicToBeSaved = byId.get();
+            topicToBeSaved.getUpVotes().add(upVote);
+
+            // refresh the Vaadiner from the DB
+            Vaadiner refreshedVaadiner = null;
+            Optional<Vaadiner> optionalVaadiner = vaadinerRepository.findById(voter.getId());
+            if (optionalVaadiner.isPresent()) {
+                refreshedVaadiner = optionalVaadiner.get();
+                if (refreshedVaadiner.getUpVotes().size()==MAX_VOTES) {
+                    throw new IllegalArgumentException("All votes already used");
+                }
+
+            } else {
+                throw new EntityNotFoundException("Vaadiner not found");
+            }
+
+            // save the vote
+            upVote.setTopic(topicToBeSaved);
+            UpVote savedVote = upVoteRepository.save(upVote);
+
+            // update Vaadiner
+            refreshedVaadiner.getUpVotes().add(savedVote);
+            vaadinerRepository.save(refreshedVaadiner);
+
+            // update the topic
+            return save(topicToBeSaved);
+        } else {
+            throw new EntityNotFoundException("Topic not found");
+        }
     }
 
 }
