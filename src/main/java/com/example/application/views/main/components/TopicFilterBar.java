@@ -14,7 +14,7 @@ public class TopicFilterBar extends HorizontalLayout {
     private SearchListener searchListener;
 
     public interface SearchListener {
-        void searchValueChanged(Optional<String> searchTerm, Optional<Category> catgory);
+        void searchValueChanged(Optional<String> searchTerm, Optional<Category> category);
     }
 
     public TopicFilterBar() {
