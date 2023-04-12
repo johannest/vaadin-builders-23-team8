@@ -2,16 +2,17 @@ package com.example.application.views.main.components;
 
 import com.example.application.data.dto.TopicListItem;
 import com.example.application.data.service.TopicService;
+import com.example.application.views.main.TopicView;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.ComponentUtil;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.html.H2;
-import com.vaadin.flow.component.html.H4;
 import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.virtuallist.VirtualList;
 import com.vaadin.flow.data.renderer.ComponentRenderer;
+import com.vaadin.flow.router.RouterLink;
 
 public class TopicLayout extends VerticalLayout {
 
@@ -26,7 +27,7 @@ public class TopicLayout extends VerticalLayout {
         topicList = new VirtualList<>();
         topicList.setRenderer(createTopicItemRenderer());
 
-        topicList.setHeight("80vh");
+        topicList.setHeightFull();
         topicList.setItems(topicService.getAllTopicsSimplified());
 
         topicSearch = new TopicFilterBar();
@@ -54,11 +55,11 @@ public class TopicLayout extends VerticalLayout {
                     VerticalLayout infoLayout = new VerticalLayout();
                     infoLayout.setSpacing(false);
                     infoLayout.setPadding(false);
-                    infoLayout.add(new H4(topic.getTitle())); // TODO should be an anchor probably
+                    var titleLink = new RouterLink(topic.getTitle(), TopicView.class, topic.getId());
+                    infoLayout.add(titleLink);
                     infoLayout.add(new Span(topic.getStatus().name()));
                     infoLayout.add(new Span(topic.getDescription()));
 
-                    // TODO status
                     var commentIndicator = new CommentIndicator(topic.getId(), topic.getCommentCount());
                     cardLayout.add(upvoteCounter, infoLayout, commentIndicator);
                     return cardLayout;

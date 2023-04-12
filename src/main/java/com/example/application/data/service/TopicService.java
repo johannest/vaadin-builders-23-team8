@@ -137,4 +137,8 @@ public class TopicService {
         }
     }
 
+    public Topic getTopicById(Long id) {
+        return topicRepository.findById(id).orElse(null);
+    }
+
 }

@@ -30,10 +30,14 @@ public class AbstractLayout extends Div implements RouterLayout {
     public AbstractLayout(AuthenticationContext authenticationContext) {
         this.authenticationContext = authenticationContext;
         add(menuLayout);
+        setHeightFull();
 
         RouteConfiguration.forApplicationScope()
                 .getAvailableRoutes()
                 .forEach(routeData -> {
+                    if (routeData.getNavigationTarget().equals(TopicView.class)) {
+                        return;
+                    }
                     var routerLink = new RouterLink(
                             routeData.getNavigationTarget().getSimpleName(),
                             routeData.getNavigationTarget());
@@ -41,7 +45,7 @@ public class AbstractLayout extends Div implements RouterLayout {
                     menuLayout.add(routerLink);
                 });
 
-        menuLayout.setMargin(true);
+        //menuLayout.setMargin(true);
 
         Button logout = new Button("Logout", event -> this.authenticationContext.logout());
         logout.addThemeVariants(ButtonVariant.LUMO_TERTIARY_INLINE);
