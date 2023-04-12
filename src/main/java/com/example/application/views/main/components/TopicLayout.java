@@ -36,7 +36,7 @@ public class TopicLayout extends VerticalLayout {
         }));
 
         add(new H2("This is the Topic Layout"));
-
+        add(topicSearch);
         add(topicList);
 
         ComponentUtil.addListener(UI.getCurrent(), CreateTopicEvent.class, event -> {
