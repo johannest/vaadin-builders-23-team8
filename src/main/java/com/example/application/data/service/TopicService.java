@@ -1,10 +1,7 @@
 package com.example.application.data.service;
 
-import com.example.application.data.entity.Status;
+import com.example.application.data.entity.*;
 import com.example.application.data.dto.TopicListItem;
-import com.example.application.data.entity.Topic;
-import com.example.application.data.entity.UpVote;
-import com.example.application.data.entity.Vaadiner;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -34,6 +31,24 @@ public class TopicService {
 
     public List<Topic> listAll() {
         return topicRepository.findAll();
+    }
+
+    public List<TopicListItem> searchTopics(Optional<String> searchTerm, Optional<Category> category) {
+        return listAll().stream().filter(topic -> {
+            if (searchTerm.isPresent()) {
+                if (category.isPresent()) {
+                    return (topic.getTitle().contains(searchTerm.get())
+                            || topic.getDescription().contains(searchTerm.get()))
+                            && topic.getCategory().equals(category.get());
+                } else {
+                    return topic.getTitle().contains(searchTerm.get())
+                            || topic.getDescription().contains(searchTerm.get());
+                }
+            } else if (category.isPresent()) {
+                return topic.getCategory().equals(category.get());
+            }
+            return true;
+        }).map(this::topicEntityToListItem).collect(Collectors.toList());
     }
 
     public List<TopicListItem> getAllTopicsSimplified() {
