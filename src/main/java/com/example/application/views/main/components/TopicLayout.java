@@ -82,4 +82,8 @@ public class TopicLayout extends VerticalLayout {
         }
         return badge;
     }
+
+    protected void refresh() {
+        topicList.setItems(topicService.searchTopics(topicSearch.getSearchTerm(), topicSearch.getCategory()));
+    }
 }

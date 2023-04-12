@@ -65,6 +65,7 @@ public class TopicService {
         topicListItem.setCommentCount(topic.getComments().size());
         topicListItem.setStatus(topic.getStatus());
         topicListItem.setCategory(topic.getCategory());
+        topicListItem.setAnswerer(topic.getAnswerer());
         return topicListItem;
     }
 
@@ -137,4 +138,23 @@ public class TopicService {
         }
     }
 
+    public Topic assign(TopicListItem topic, Vaadiner vaadiner) {
+        // refresh the Vaadiner from the DB
+        Optional<Vaadiner> optionalVaadiner = vaadinerRepository.findById(vaadiner.getId());
+        if (optionalVaadiner.isEmpty()) {
+            throw new EntityNotFoundException("Vaadiner not found");
+        }
+
+        // refresh the topic from the DB
+        Optional<Topic> byId = topicRepository.findById(topic.getId());
+        if (byId.isPresent()) {
+            Topic topicToBeSaved = byId.get();
+            topicToBeSaved.setAnswerer(optionalVaadiner.get());
+
+            // update the topic
+            return save(topicToBeSaved);
+        } else {
+            throw new EntityNotFoundException("Topic not found");
+        }
+    }
 }

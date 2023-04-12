@@ -8,16 +8,19 @@ import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.html.H4;
 import com.vaadin.flow.component.html.Span;
+import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.data.renderer.ComponentRenderer;
 
 public class TopicAdminLayout extends TopicLayout {
 
+    private final TopicService topicService;
     private final VaadinerService vaadinerService;
 
     public TopicAdminLayout(TopicService topicService, VaadinerService vaadinerService) {
         super(topicService);
+        this.topicService = topicService;
         this.vaadinerService = vaadinerService;
     }
 
@@ -27,26 +30,36 @@ public class TopicAdminLayout extends TopicLayout {
                 topic -> {
                     var cardLayout = new HorizontalLayout();
                     var upvoteCounter = new UpVote(topic.getId(), topic.getUpvoteCount());
-                    cardLayout.setMargin(true);
 
-                    VerticalLayout infoLayout = new VerticalLayout();
+                    var infoLayout = new VerticalLayout();
                     infoLayout.setSpacing(false);
                     infoLayout.setPadding(false);
-                    infoLayout.add(new H4(topic.getTitle())); // TODO should be an anchor probably
-                    infoLayout.add(createBadge(topic));
-                    infoLayout.add(new Span(topic.getDescription()));
-                    infoLayout.add(createAssigneeSelect());
+                    // TODO should be an anchor probably
+                    infoLayout.add(new HorizontalLayout(createBadge(topic), new H4(topic.getTitle())));
+
+                    var description = new Span(topic.getDescription());
+                    description.setClassName("topic-item-description");
+                    infoLayout.add(description);
+                    infoLayout.add(createAssigneeSelect(topic));
 
                     // TODO status
                     var commentIndicator = new CommentIndicator(topic.getId(), topic.getCommentCount());
                     cardLayout.add(upvoteCounter, infoLayout, commentIndicator);
+                    cardLayout.setClassName("topic-item");
+                    cardLayout.setAlignItems(Alignment.CENTER);
                     return cardLayout;
                 });
     }
 
-    private Component createAssigneeSelect() {
-        ComboBox<Vaadiner> assigneeSelect = new ComboBox<>();
+    private Component createAssigneeSelect(TopicListItem topic) {
+        ComboBox<Vaadiner> assigneeSelect = new ComboBox<>("Assign topic to: ");
         assigneeSelect.setItems(vaadinerService.listAllLeaders());
+        assigneeSelect.setValue(topic.getAnswerer());
+        assigneeSelect.addValueChangeListener(e -> {
+            topicService.assign(topic, assigneeSelect.getValue());
+            Notification.show("Topic assigned saved.");
+            refresh();
+        });
         return assigneeSelect;
     }
 }

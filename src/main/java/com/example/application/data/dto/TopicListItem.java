@@ -2,6 +2,7 @@ package com.example.application.data.dto;
 
 import com.example.application.data.entity.Category;
 import com.example.application.data.entity.Status;
+import com.example.application.data.entity.Vaadiner;
 
 public class TopicListItem {
     private int upvoteCount;
@@ -11,6 +12,7 @@ public class TopicListItem {
     private int commentCount;
     private Category category;
     private Status status;
+    private Vaadiner answerer;
 
     public int getUpvoteCount() {
         return upvoteCount;
@@ -66,5 +68,13 @@ public class TopicListItem {
 
     public void setStatus(Status status) {
         this.status = status;
+    }
+
+    public Vaadiner getAnswerer() {
+        return answerer;
+    }
+
+    public void setAnswerer(Vaadiner answerer) {
+        this.answerer = answerer;
     }
 }
