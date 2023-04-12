@@ -1,9 +1,8 @@
 package com.example.application.views.main.components;
 
 import com.example.application.data.dto.TopicListItem;
+import com.example.application.data.service.TopicService;
 import com.vaadin.flow.component.Component;
-import com.vaadin.flow.component.avatar.Avatar;
-import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.html.H2;
 import com.vaadin.flow.component.html.H4;
 import com.vaadin.flow.component.html.Span;
@@ -17,8 +16,11 @@ import java.util.List;
 
 public class TopicLayout extends VerticalLayout {
 
+    private TopicService topicService;
+
     private VirtualList<TopicListItem> topicList;
-    public TopicLayout() {
+    public TopicLayout(TopicService topicService) {
+        this.topicService = topicService;
         topicList = new VirtualList<>();
         topicList.setRenderer(createTopicItemRenderer());
         topicList.setItems(createTestData());
