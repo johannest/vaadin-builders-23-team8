@@ -79,6 +79,9 @@ public class TopicLayout extends VerticalLayout {
             case NEW -> {
                 badge.getElement().getThemeList().add("badge");
             }
+            case ASSIGNED -> {
+                badge.getElement().getThemeList().add("badge contrast");
+            }
             case ANSWERED -> {
                 badge.getElement().getThemeList().add("badge success");
             }

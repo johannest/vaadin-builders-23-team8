@@ -149,7 +149,22 @@ public class TopicService {
         Optional<Topic> byId = topicRepository.findById(topic.getId());
         if (byId.isPresent()) {
             Topic topicToBeSaved = byId.get();
+            topicToBeSaved.setStatus(Status.ASSIGNED);
             topicToBeSaved.setAnswerer(optionalVaadiner.get());
+
+            // update the topic
+            return save(topicToBeSaved);
+        } else {
+            throw new EntityNotFoundException("Topic not found");
+        }
+    }
+
+    public Topic answered(TopicListItem topic) {
+        // refresh the topic from the DB
+        Optional<Topic> byId = topicRepository.findById(topic.getId());
+        if (byId.isPresent()) {
+            Topic topicToBeSaved = byId.get();
+            topicToBeSaved.setStatus(Status.ANSWERED);
 
             // update the topic
             return save(topicToBeSaved);
