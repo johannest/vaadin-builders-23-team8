@@ -1,14 +1,17 @@
 package com.example.application.data.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
+import jakarta.persistence.*;
 
 import java.util.List;
 
 @Entity
 public class Topic extends AbstractEntity {
     private String title;
+    private String description;
+    @Enumerated(EnumType.STRING)
+    private Category category;
+    @Enumerated(EnumType.STRING)
+    private Status status;
     @OneToMany
     private List<UpVote> upVotes;
     @OneToMany
@@ -26,6 +29,30 @@ public class Topic extends AbstractEntity {
 
     public void setTitle(String title) {
         this.title = title;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public Category getCategory() {
+        return category;
+    }
+
+    public void setCategory(Category category) {
+        this.category = category;
+    }
+
+    public Status getStatus() {
+        return status;
+    }
+
+    public void setStatus(Status status) {
+        this.status = status;
     }
 
     public List<UpVote> getUpVotes() {
