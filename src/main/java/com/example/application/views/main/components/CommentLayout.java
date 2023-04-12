@@ -46,14 +46,13 @@ public class CommentLayout extends VerticalLayout {
             comment.setTopic(topic);
             comment.setContent(submitEvent.getValue());
             topicService.saveComment(comment);
-
             refreshComments();
         });
         add(commentInput, commentList);
     }
 
     public void refreshComments() {
-        var comments = topicService.getCommentsForTopic(topic.getId());
+        var comments = topic.getComments();
         commentList.setItems(commentsToMessageListItems(comments));
     }
 

@@ -216,7 +216,11 @@ public class TopicService {
     }
 
     public Long saveComment(Comment comment) {
-        return commentRepository.save(comment).getId();
+        var commentId = commentRepository.save(comment).getId();
+        var topic = comment.getTopic();
+        topic.getComments().add(comment);
+        save(topic);
+        return commentId;
     }
 
 }
