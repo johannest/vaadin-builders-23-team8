@@ -24,10 +24,12 @@ public class DataLoader {
         this.upVoteRepository = upVoteRepository;
         this.vaadinerRepository = vaadinerRepository;
 
+
+        LOG.info("-------------------------------");
+        LOG.info("Creating initial data");
         createTestUsers();
         createTestData();
-
-        LOG.info("Topics found {}", topicRepository.count());
+        LOG.info("Topics created {}", topicRepository.count());
         LOG.info("-------------------------------");
     }
 
