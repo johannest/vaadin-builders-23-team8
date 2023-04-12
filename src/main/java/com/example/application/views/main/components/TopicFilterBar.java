@@ -20,7 +20,7 @@ public class TopicFilterBar extends HorizontalLayout {
     public TopicFilterBar() {
         searchField = new TextField();
         searchField.setWidth("100%");
-        searchField.setPlaceholder("Search...");
+        searchField.setPlaceholder("Search topics...");
         searchField.setPrefixComponent(VaadinIcon.SEARCH.create());
         searchField.setClearButtonVisible(true);
         searchField.addValueChangeListener(e -> {
