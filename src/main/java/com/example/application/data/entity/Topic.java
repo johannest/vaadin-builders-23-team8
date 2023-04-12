@@ -12,9 +12,9 @@ public class Topic extends AbstractEntity {
     private Category category;
     @Enumerated(EnumType.STRING)
     private Status status;
-    @OneToMany
+    @OneToMany(fetch = FetchType.EAGER)
     private List<UpVote> upVotes;
-    @OneToMany
+    @OneToMany(fetch = FetchType.EAGER)
     private List<Comment> comments;
     @ManyToOne
     private Vaadiner submitter;
