@@ -4,6 +4,7 @@ import com.example.application.data.entity.*;
 import com.example.application.data.dto.TopicListItem;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -174,6 +175,15 @@ public class TopicService {
     }
     public Topic getTopicById(Long id) {
         return topicRepository.findById(id).orElse(null);
+    }
+
+    public List<Comment> getCommentsForTopic(Long topicId) {
+        return commentRepository.findAll((root, query, criteriaBuilder) ->
+                criteriaBuilder.equal(root.get("topic"), topicId));
+    }
+
+    public Long saveComment(Comment comment) {
+        return commentRepository.save(comment).getId();
     }
 
 }

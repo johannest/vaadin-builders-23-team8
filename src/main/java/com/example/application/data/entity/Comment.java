@@ -3,7 +3,7 @@ package com.example.application.data.entity;
 import jakarta.persistence.Entity;
 import jakarta.persistence.ManyToOne;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Entity
 public class Comment extends AbstractEntity {
@@ -11,7 +11,7 @@ public class Comment extends AbstractEntity {
     @ManyToOne
     private Topic topic;
     private String content;
-    private LocalDate timestamp;
+    private LocalDateTime timestamp;
     @ManyToOne
     private Vaadiner commenter;
 
@@ -31,11 +31,11 @@ public class Comment extends AbstractEntity {
         this.content = content;
     }
 
-    public LocalDate getTimestamp() {
+    public LocalDateTime getTimestamp() {
         return timestamp;
     }
 
-    public void setTimestamp(LocalDate timestamp) {
+    public void setTimestamp(LocalDateTime timestamp) {
         this.timestamp = timestamp;
     }
 
