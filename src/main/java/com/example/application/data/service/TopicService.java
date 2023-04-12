@@ -76,6 +76,7 @@ public class TopicService {
     }
 
     public Topic save(Topic topic) {
+        topic.setSubmitter(getCurrentVaadiner());
         return topicRepository.save(topic);
     }
 

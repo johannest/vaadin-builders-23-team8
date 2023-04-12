@@ -73,7 +73,6 @@ public class TopicForm extends VerticalLayout {
             final Topic topic = topicBinder.getBean();
             topic.setAnonymous(true);
             topic.setStatus(Status.NEW);
-//            topic.setSubmitter(getVaadiner); TODO
 
             topicService.save(topic);
             topicBinder.setBean(new Topic());
