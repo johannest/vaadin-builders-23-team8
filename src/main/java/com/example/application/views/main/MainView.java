@@ -1,10 +1,9 @@
 package com.example.application.views.main;
 
-import com.vaadin.flow.component.Key;
-import com.vaadin.flow.component.button.Button;
-import com.vaadin.flow.component.notification.Notification;
+import com.example.application.views.main.components.TopicForm;
+import com.example.application.views.main.components.TopicLayout;
+
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
-import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import jakarta.annotation.security.PermitAll;
@@ -14,20 +13,12 @@ import jakarta.annotation.security.PermitAll;
 @PermitAll
 public class MainView extends HorizontalLayout {
 
-    private TextField name;
-    private Button sayHello;
+    private TopicForm topicForm;
+    private TopicLayout topicLayout;
 
     public MainView() {
-        name = new TextField("Your name");
-        sayHello = new Button("Say hello");
-        sayHello.addClickListener(e -> {
-            Notification.show("Hello " + name.getValue());
-        });
-        sayHello.addClickShortcut(Key.ENTER);
-
-        setMargin(true);
-        setVerticalComponentAlignment(Alignment.END, name, sayHello);
-
-        add(name, sayHello);
+       topicForm = new TopicForm();
+       topicLayout = new TopicLayout();
+       add(topicLayout, topicForm);
     }
 }
