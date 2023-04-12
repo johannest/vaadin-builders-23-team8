@@ -1,5 +1,5 @@
 package com.example.application.data.entity;
 
 public enum Category {
-    PRODUCTS, SERVICES, OPERATIONS
+    PRODUCTS, SERVICES, OPERATIONS, HR, FINANCES
 }
