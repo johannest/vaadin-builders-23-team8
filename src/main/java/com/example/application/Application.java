@@ -3,6 +3,7 @@ package com.example.application;
 import com.example.application.data.generator.DataLoader;
 import com.example.application.data.service.TopicRepository;
 import com.example.application.data.service.UpVoteRepository;
+import com.example.application.data.service.VaadinerRepository;
 import com.vaadin.flow.component.dependency.NpmPackage;
 import com.vaadin.flow.component.page.AppShellConfigurator;
 import com.vaadin.flow.server.PWA;
@@ -30,8 +31,9 @@ public class Application implements AppShellConfigurator {
 
 
     @Bean
-    public CommandLineRunner loadData(TopicRepository topicRepository, UpVoteRepository upVoteRepository) {
-        return args -> new DataLoader(topicRepository, upVoteRepository);
+    public CommandLineRunner loadData(TopicRepository topicRepository, UpVoteRepository upVoteRepository,
+                                      VaadinerRepository vaadinerRepository) {
+        return args -> new DataLoader(topicRepository, upVoteRepository, vaadinerRepository);
     }
 
 }

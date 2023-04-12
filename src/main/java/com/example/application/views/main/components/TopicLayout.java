@@ -44,7 +44,7 @@ public class TopicLayout extends VerticalLayout {
         });
     }
 
-    private ComponentRenderer<Component, TopicListItem> createTopicItemRenderer() {
+    protected ComponentRenderer<Component, TopicListItem> createTopicItemRenderer() {
         return new ComponentRenderer<>(
                 topic -> {
                     var cardLayout = new HorizontalLayout();
@@ -65,7 +65,7 @@ public class TopicLayout extends VerticalLayout {
                 });
     }
 
-    private static Span createBadge(TopicListItem topic) {
+    protected static Span createBadge(TopicListItem topic) {
         Span badge = new Span(topic.getStatus().name());
         switch (topic.getStatus()) {
             case NEW -> {

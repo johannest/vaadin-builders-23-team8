@@ -12,6 +12,16 @@ body {
     margin-right: auto;
 }
 
+.admin {
+    background-color: white;
+    border: 2px solid var(--lumo-error-color-50pct);
+    border-radius: 10px;
+    max-width: 1150px;
+    align-self: center;
+    margin-left: auto;
+    margin-right: auto;
+}
+
 .topic-form {
     padding: 20px;
     border-left: 1px solid var(--lumo-contrast-10pct);

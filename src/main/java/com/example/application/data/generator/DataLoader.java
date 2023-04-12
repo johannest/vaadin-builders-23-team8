@@ -1,10 +1,9 @@
 package com.example.application.data.generator;
 
-import com.example.application.data.entity.Status;
-import com.example.application.data.entity.Topic;
-import com.example.application.data.entity.UpVote;
+import com.example.application.data.entity.*;
 import com.example.application.data.service.TopicRepository;
 import com.example.application.data.service.UpVoteRepository;
+import com.example.application.data.service.VaadinerRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -17,15 +16,26 @@ public class DataLoader {
 
     private final TopicRepository topicRepository;
     private final UpVoteRepository upVoteRepository;
+    private final VaadinerRepository vaadinerRepository;
 
-    public DataLoader(TopicRepository topicRepository, UpVoteRepository upVoteRepository) {
+    public DataLoader(TopicRepository topicRepository, UpVoteRepository upVoteRepository,
+                      VaadinerRepository vaadinerRepository) {
         this.topicRepository = topicRepository;
         this.upVoteRepository = upVoteRepository;
+        this.vaadinerRepository = vaadinerRepository;
 
+        createTestUsers();
         createTestData();
 
         LOG.info("Topics found {}", topicRepository.count());
         LOG.info("-------------------------------");
+    }
+
+    private void createTestUsers() {
+        createVaadiner(100, "Steven Grandchamp", "steven@vaadin.com", Role.HERD_LEADER);
+        createVaadiner(101, "Kimberly Weins", "kimw@vaadin.com", Role.HERD_LEADER);
+        createVaadiner(102, "Jurka Rahikkala", "jurka@vaadin.com", Role.HERD_LEADER);
+        createVaadiner(103, "Minna Hohti", "minna@vaadin.com", Role.HERD_LEADER);
     }
 
     private List<Topic> createTestData() {
@@ -59,5 +69,14 @@ public class DataLoader {
 
         topicRepository.save(topic);
         return topic;
+    }
+
+    private Vaadiner createVaadiner(long id, String name, String email, Role role) {
+        Vaadiner vaadiner = new Vaadiner();
+        vaadiner.setId(id);
+        vaadiner.setName(name);
+        vaadiner.setEmail(email);
+        vaadiner.setRole(role);
+        return vaadinerRepository.save(vaadiner);
     }
 }
