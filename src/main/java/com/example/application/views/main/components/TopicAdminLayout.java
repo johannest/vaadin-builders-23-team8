@@ -37,7 +37,7 @@ public class TopicAdminLayout extends TopicLayout {
                     infoLayout.setSpacing(false);
                     infoLayout.setPadding(false);
                     // TODO should be an anchor probably
-                    infoLayout.add(new HorizontalLayout(createBadge(topic), new H4(topic.getTitle())));
+                    infoLayout.add(new HorizontalLayout(new StatusBadge(topic.getStatus()), new H4(topic.getTitle())));
 
                     var description = new Span(topic.getDescription());
                     description.setClassName("topic-item-description");

@@ -2,6 +2,7 @@ package com.example.application.views.main;
 
 import com.example.application.data.entity.Topic;
 import com.example.application.data.service.TopicService;
+import com.example.application.views.main.components.StatusBadge;
 import com.example.application.views.main.components.UpVote;
 import com.vaadin.flow.component.AttachEvent;
 import com.vaadin.flow.component.html.H4;
@@ -22,9 +23,11 @@ public class TopicView extends VerticalLayout implements HasUrlParameter<Long> {
 
     @Autowired
     private TopicService topicService;
-    private Long topicId;
     private Topic topic;
 
+    public TopicView() {
+        addClassName("main");
+    }
 
     @Override
     protected void onAttach(AttachEvent attachEvent) {
@@ -46,8 +49,7 @@ public class TopicView extends VerticalLayout implements HasUrlParameter<Long> {
         var infoLayout = new VerticalLayout();
         infoLayout.setSpacing(false);
         infoLayout.setPadding(false);
-        infoLayout.add(new H4(topic.getTitle()));
-        infoLayout.add(new Span(topic.getStatus().name()));
+        infoLayout.add(new HorizontalLayout(new StatusBadge(topic.getStatus()), new H4(topic.getTitle())));
         infoLayout.add(new Span(topic.getDescription()));
 
         topicDetails.add(upVote, infoLayout);
@@ -55,8 +57,6 @@ public class TopicView extends VerticalLayout implements HasUrlParameter<Long> {
 
     @Override
     public void setParameter(BeforeEvent beforeEvent, Long topicId) {
-        this.topicId = topicId;
         this.topic = topicService.getTopicById(topicId);
-
     }
 }

@@ -59,7 +59,7 @@ public class TopicLayout extends VerticalLayout {
                     infoLayout.setPadding(false);
                     var titleLink = new RouterLink(topic.getTitle(), TopicView.class, topic.getId());
 
-                    infoLayout.add(new HorizontalLayout(createBadge(topic), titleLink));
+                    infoLayout.add(new HorizontalLayout(new StatusBadge(topic.getStatus()), titleLink));
 
                     var description = new Span(topic.getDescription());
                     description.setClassName("topic-item-description");
@@ -71,22 +71,6 @@ public class TopicLayout extends VerticalLayout {
                     cardLayout.setAlignItems(Alignment.CENTER);
                     return cardLayout;
                 });
-    }
-
-    protected static Span createBadge(TopicListItem topic) {
-        Span badge = new Span(topic.getStatus().name());
-        switch (topic.getStatus()) {
-            case NEW -> {
-                badge.getElement().getThemeList().add("badge");
-            }
-            case ASSIGNED -> {
-                badge.getElement().getThemeList().add("badge contrast");
-            }
-            case ANSWERED -> {
-                badge.getElement().getThemeList().add("badge success");
-            }
-        }
-        return badge;
     }
 
     protected void refresh() {
