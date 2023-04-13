@@ -37,7 +37,7 @@ public class TopicForm extends VerticalLayout {
 
         var categorySelect = new ComboBox<Category>();
         categorySelect.setItems(Category.values());
-        categorySelect.setItemLabelGenerator(Enum::name);
+        categorySelect.setItemLabelGenerator(Category::getName);
         topicBinder.forField(categorySelect)
                 .bind(Topic::getCategory, Topic::setCategory);
 
