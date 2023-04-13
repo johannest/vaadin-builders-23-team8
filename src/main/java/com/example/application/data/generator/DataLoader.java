@@ -35,10 +35,10 @@ public class DataLoader {
     }
 
     private void createTestUsers() {
-        createVaadiner("Steven Grandchamp", "steven@vaadin.com", Role.HERD_LEADER, null);
-        createVaadiner("Kimberly Weins", "kimw@vaadin.com", Role.HERD_LEADER, null);
-        createVaadiner("Jurka Rahikkala", "jurka@vaadin.com", Role.HERD_LEADER, null);
-        createVaadiner("Minna Hohti", "minna@vaadin.com", Role.HERD_LEADER, null);
+        createVaadiner("Steven Grandchamp", "test1@vaadin.com", Role.HERD_LEADER, null);
+        createVaadiner("Kimberly Weins", "test2@vaadin.com", Role.HERD_LEADER, null);
+        createVaadiner("Jurka Rahikkala", "test3@vaadin.com", Role.HERD_LEADER, null);
+        createVaadiner("Minna Hohti", "test4@vaadin.com", Role.HERD_LEADER, null);
         createVaadiner("Mr User", "myuser@vaadin.com", Role.HERD_MEMBER, "cc208ae6-8688-4b67-8c46-2c0b42314e12");
         createVaadiner("Mr Admin", "myadmin@vaadin.com", Role.HERD_LEADER, "5da74271-7f8e-4ce8-bdd1-f3339c98e656");
     }
